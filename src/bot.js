@@ -30,6 +30,22 @@ class GoodGuyHttpsBot {
   isHostValidated(host) {
     return this.validatedHosts.indexOf(host) > -1
   }
+
+  isTweetValid(tweet) {
+    if(tweet.in_reply_to_status_id !== null)
+      return false
+    if(tweet.is_quote_status)
+      return false
+    if(tweet.possibly_sensitive)
+      return false
+    if(tweet.lang !== null && tweet.lang !== 'en')
+      return false
+    if(tweet.user.followers_count < 300)
+      return false
+    if(tweet.user.protected)
+      return false
+    return true
+  }
 }
 
 module.exports = GoodGuyHttpsBot
