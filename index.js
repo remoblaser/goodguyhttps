@@ -36,10 +36,10 @@ stream.on('tweet', tweet => {
       if(! valid) {
         logger.info('Certificate seems invalid for', unshortenedUrl)
         let reply = bot.createFriendlyReply(tweet.user)
-        /*T.post('statuses/update', {
-        in_reply_to_status_id: tweet.id_str,
-        status: reply
-      })*/
+        T.post('statuses/update', {
+          in_reply_to_status_id: tweet.id_str,
+          status: reply
+        })
       }
     })
   })
