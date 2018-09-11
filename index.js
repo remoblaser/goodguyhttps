@@ -15,7 +15,7 @@ let T = new Twit({
   access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 })
 
-let stream = T.stream('statuses/filter', {track: 'http://'})
+let stream = T.stream('statuses/filter', {track: 'http'})
 
 stream.on('tweet', tweet => {
   logger.info('Received tweet:', tweet.text)
