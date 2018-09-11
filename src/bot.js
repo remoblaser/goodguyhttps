@@ -1,3 +1,4 @@
+const urlUtil = require('url')
 const REPLIES = require('./replies')
 
 class GoodGuyHttpsBot {
@@ -23,11 +24,13 @@ class GoodGuyHttpsBot {
     return url.startsWith('http://')
   }
 
-  addValidatedHost(host) {
+  addValidatedUrl(url) {
+    let host = urlUtil.parse(url).hostname
     this.validatedHosts.push(host)
   }
 
-  isHostValidated(host) {
+  isUrlValidated(url) {
+    let host = urlUtil.parse(url).hostname
     return this.validatedHosts.indexOf(host) > -1
   }
 
@@ -40,7 +43,13 @@ class GoodGuyHttpsBot {
       return false
     if(tweet.lang !== null && tweet.lang !== 'en')
       return false
-    if(tweet.user.followers_count < 300)
+    if(tweet.user.followers_count < 1000)
+      return false
+    if(tweet.user.favourites_count < 200)
+      return false
+    if(tweet.user.statuses_count < 100)
+      return false
+    if(tweet.user.default_profile)
       return false
     if(tweet.user.protected)
       return false

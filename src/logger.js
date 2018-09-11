@@ -1,5 +1,5 @@
-var log = require('loglevel');
-var lpre = require('loglevel-plugin-prefix')
+const log = require('loglevel');
+const lpre = require('loglevel-plugin-prefix')
 
 lpre.reg(log)
 lpre.apply(log, {

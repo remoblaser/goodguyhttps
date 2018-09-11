@@ -1,16 +1,14 @@
 const urlUtil = require('url')
-const sslChecker = require('ssl-checker')
+const sslCertificate = require('get-ssl-certificate')
 
-module.exports = function checkUrlForValidCertificate(url) {
+module.exports = (url) => {
   let host = urlUtil.parse(url).hostname
-  return new Promise((resolve, reject) => {
-    sslChecker(host, 'GET', 443).then(response => {
-      if(response.days_remaining < 0) {
-        reject(response)
-      }
-      resolve(response)
-    }).catch(error => {
-      reject(error)
+  return new Promise((resolve) => {
+    sslCertificate.get(host).then(() => {
+      resolve(true)
+    }).catch((error) => {
+      console.log(error)
+      resolve(false)
     })
   })
 }

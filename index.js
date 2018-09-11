@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 const Twit = require('twit')
+const tall = require('tall').default
 const GoodGuyHttpsBot = require('./src/bot')
 const checkCertificate = require('./src/check-certificate')
 const logger = require('./src/logger')
@@ -20,20 +21,26 @@ let stream = T.stream('statuses/filter', {track: 'http'})
 stream.on('tweet', tweet => {
   if(! bot.isTweetValid(tweet))
     return
-  logger.info('Received tweet:', tweet)
-  let url = bot.getUrlInTweet(tweet)
-  if(! url || bot.isHostValidated(url))
-    return
-  bot.addValidatedHost(url)
 
-  checkCertificate(url).then((response) => {
-    logger.info('Certificate seems valid:', response)
-  }).catch((error) => {
-    logger.info('Certificate seems invalid:', error)
-    let reply = bot.createFriendlyReply(tweet.user)
-    T.post('statuses/update', {
-      in_reply_to_status_id: tweet.id_str,
-      status: reply
+  let url = bot.getUrlInTweet(tweet)
+
+  if(! url)
+    return
+
+  tall(url).then(unshortenedUrl => {
+    if(bot.isUrlValidated(unshortenedUrl))
+      return
+    bot.addValidatedUrl(unshortenedUrl)
+
+    checkCertificate(unshortenedUrl).then((valid) => {
+      if(! valid) {
+        logger.info('Certificate seems invalid for', unshortenedUrl)
+        let reply = bot.createFriendlyReply(tweet.user)
+        /*T.post('statuses/update', {
+        in_reply_to_status_id: tweet.id_str,
+        status: reply
+      })*/
+      }
     })
   })
 })
