@@ -1,0 +1,16 @@
+{
+  "name": "goodguyhttps",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Simple Twitter bot to check tweets for HTTP URLs and response with a message they should switch to HTTPS",
+  "main": "index.js",
+  "author": "Remo Blaser <me@remoblaser.ch>",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^6.0.0",
+    "loglevel": "^1.6.1",
+    "loglevel-plugin-prefix": "^0.8.4",
+    "ssl-checker": "^1.1.1",
+    "twit": "^2.2.11"
+  }
+}
