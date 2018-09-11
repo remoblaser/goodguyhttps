@@ -18,7 +18,7 @@ let T = new Twit({
 let stream = T.stream('statuses/filter', {track: 'http://'})
 
 stream.on('tweet', tweet => {
-  logger.info('Received tweet:', tweet.status)
+  logger.info('Received tweet:', tweet.text)
   let url = bot.getUrlInTweet(tweet)
   if(! url || bot.isHostValidated(url))
     return
