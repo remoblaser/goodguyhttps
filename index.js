@@ -23,12 +23,13 @@ stream.on('tweet', tweet => {
     return
 
   let url = bot.getUrlInTweet(tweet)
-
   if(! url)
     return
 
   tall(url).then(unshortenedUrl => {
-    if(bot.isUrlValidated(unshortenedUrl))
+    if(! bot.websiteBelongsToUser(url, tweet.user))
+      return
+    if(bot.isUrlAlreadyValidated(unshortenedUrl))
       return
     bot.addValidatedUrl(unshortenedUrl)
 
@@ -41,6 +42,6 @@ stream.on('tweet', tweet => {
           status: reply
         })
       }
-    })
-  })
+    }).catch(logger.error)
+  }).catch(logger.error)
 })

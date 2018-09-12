@@ -29,7 +29,7 @@ class GoodGuyHttpsBot {
     this.validatedHosts.push(host)
   }
 
-  isUrlValidated(url) {
+  isUrlAlreadyValidated(url) {
     let host = urlUtil.parse(url).hostname
     return this.validatedHosts.indexOf(host) > -1
   }
@@ -43,7 +43,7 @@ class GoodGuyHttpsBot {
       return false
     if(tweet.lang !== null && tweet.lang !== 'en')
       return false
-    if(tweet.user.followers_count < 1000)
+    if(tweet.user.followers_count < 500)
       return false
     if(tweet.user.favourites_count < 200)
       return false
@@ -54,6 +54,15 @@ class GoodGuyHttpsBot {
     if(tweet.user.protected)
       return false
     return true
+  }
+
+  websiteBelongsToUser(url, user) {
+    let host = urlUtil.parse(url).hostname
+    if(user.url && user.url.includes(host))
+      return true
+    if(user.description && user.description.includes(host))
+      return true
+    return false
   }
 }
 
